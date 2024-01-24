@@ -4,7 +4,11 @@ import Home from "./routes/home";
 import Profile from "./routes/profile";
 import Login from "./routes/login";
 import CreateAccount from "./routes/create-account";
+import LoadingScreen from "./components/loading-screen";
+
 import { createGlobalStyle } from "styled-components";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const router = createBrowserRouter([
   {
@@ -32,8 +36,10 @@ const router = createBrowserRouter([
 ]);
 
 const GlobalStyles = createGlobalStyle`
-${onreset};
-*box-sizing: border-box;
+/* ${onreset}; */
+* {
+  box-sizing: border-box;
+}
 body {
   background-color: black;
   color: white;
@@ -42,10 +48,22 @@ body {
 `;
 
 function App() {
+  const [isLoading, setLoading] = useState(true);
+  const init = async () => {
+    // wait for firebase
+
+    //setTimeout(() => setLoading(false), 2000);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
   return (
     <>
       <GlobalStyles />
-      <RouterProvider router={router} />
+      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
     </>
   );
 }
